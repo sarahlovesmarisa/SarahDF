@@ -1,9 +1,9 @@
-<div align="center"><img src="tools/icon-source.png" alt="DirtyFrag grenade logo" width="116" /><h1>DirtyFrag</h1> <p><strong>Root without unlocking. Gone after reboot.</strong></p><p>
+<div align="center"><img src="tools/icon-source.png" alt="DirtyFrag grenade logo" width="116" /><h1>SarahDF</h1> <p><strong>Root without unlocking. Gone after reboot.</strong></p><p>
   An ephemeral Android root utility powered by <strong>CVE-2026-43284</strong>.<br />
   Built for Samsung devices, with a <strong>One UI-inspired interface</strong>, KernelSU integration,<br />
-  and no custom kernel or unlocked bootloader required on vulnerable devices.
+  and no custom kernel or unlocked bootloader required on vulnerable devices. A fork of [mitschud's Dirtfrag](https://github.com/mitschud/DirtyFrag) for devices that silence logging.
 </p><p <p align="center">
-  <a href="https://github.com/mitschud/DirtyFrag/releases/latest"><img src="https://img.shields.io/github/v/release/mitschud/DirtyFrag?label=Release&color=brightgreen" alt="Release"></a>
+  <a href="https://github.com/mitschud/DirtyFrag/releases/latest"><img src="https://img.shields.io/github/v/release/sarahlovesmarisa/SarahDF?label=Release&color=brightgreen" alt="Release"></a>
   <img src="https://img.shields.io/badge/Android-12%2B-3DDC84?logo=android&logoColor=white" alt="Android 12+">
 <img src="https://img.shields.io/badge/%F0%9F%94%B5-One%20UI%209-555" alt="One UI 9">
   <img src="https://img.shields.io/badge/SU-KernelSU-555" alt="KernelSU">
@@ -11,9 +11,9 @@
     <img src="https://img.shields.io/badge/License-GPL--2.0--only-555" alt="GPL-2.0-only">
   </a>
 </p><p>
-  <a href="https://github.com/mitschud/DirtyFrag/releases/latest"><strong>Download APK</strong></a>
-  &nbsp;·&nbsp; <a href="https://github.com/mitschud/DirtyFrag/issues">Report an issue</a>
-  &nbsp;·&nbsp; <a href="https://github.com/diabl0w/DFRoot">Upstream DFRoot</a>
+  <a href="https://github.com/sarahlovesmarisa/SarahDF/releases/latest"><strong>Download APK</strong></a>
+  &nbsp;·&nbsp; <a href="https://github.com/sarahlovesmarisa/SarahDF/issues">Report an issue</a>
+  &nbsp;·&nbsp; <a href="https://github.com/mitschud/Dirtyfrag">Upstream Dirtyfrag</a>
 </p></div>
 
 > [!IMPORTANT]
@@ -23,7 +23,7 @@ Compatibility depends on the device's kernel and security patches. Root is **eph
 
 ## Install
 
-1. Install the DirtyFrag APK from [Releases](https://github.com/mitschud/DirtyFrag/releases/latest).
+1. Install the DirtyFrag APK from [Releases](https://github.com/sarahlovesmarisa/SarahDF/releases/latest).
 2. Install an SU manager that **ships `libksud.so`**:
    - Samsung - **required**:
      - [diabl0w's KernelSU](https://github.com/diabl0w/KernelSU/releases)
@@ -32,21 +32,7 @@ Compatibility depends on the device's kernel and security patches. Root is **eph
      - [KernelSU-Next](https://github.com/KernelSU-Next/KernelSU-Next/releases/latest)
      - [KowSU](https://github.com/KOWX712/KernelSU/releases/latest)
      - [BakaSU](https://github.com/Baka-SU/BakaSU/releases/latest) (formerly ReSukiSU)
-3. Open DirtyFrag, pick your manager in the **SU Manager** card, then press **Run exploit**.
-
-> [!WARNING]
-> Since 1.10 (upstream 3.2) DirtyFrag no longer bundles `ksud` - it is staged from the selected
-> manager's own `libksud.so`. A manager that does not ship that library cannot give you root. The
-> older advice to install a CI / Actions build of the manager no longer applies.
-
-> [!NOTE]
-> Pre-release builds of `master` are not published to Releases. Take the **`DFRoot`** artifact of the
-> latest green [Build](https://github.com/mitschud/DirtyFrag/actions/workflows/build.yml) run: it is a
-> signed release build - the workflow restores the `KEYSTORE` secret into `app/keystore.jks` and runs
-> `assembleRelease` - and inside the artifact the APK is at
-> `app/build/outputs/apk/release/dirtyfrag.apk`. Tagged and untagged builds go through that same
-> keystore step, so a `master` build carries the released app's signing key and installs over it as an
-> update rather than a fresh install.
+3. Open SarahDF, pick your manager in the **SU Manager** card, then press **Run exploit**.
 
 A fresh install of DirtyFrag gets a new Android UID, so the grant in the manager has to be given
 again after every reinstall.
@@ -171,6 +157,7 @@ next privileged call to the hooked function runs the shellcode, which loads the 
 
 ## Credits
 
+- Dirtyfrag fork of DFroot by mitschud: https://github.com/mitschud/dirtyfrag
 - Upstream project and exploit chain: https://github.com/diabl0w/DFRoot
 - Original PoC and various code: https://github.com/lsposed/lspromise
 - SELinux permissive kernel modules and various code: https://github.com/polygraphene/DFReroot

